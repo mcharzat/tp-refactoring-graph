@@ -87,10 +87,7 @@ public class Graph {
 			vertex = findVertex(coordinate);
 		} catch (NotFoundException e) {
 			/* création d'un nouveau sommet car non trouvé */
-			vertex = new Vertex();
-			vertex.setId(Integer.toString(getVertices().size()));
-			vertex.setCoordinate(coordinate);
-			vertices.add(vertex);
+			vertex = createVertex(coordinate, Integer.toString(getVertices().size()));
 		}
 		return vertex;
 	}
@@ -147,4 +144,19 @@ public class Graph {
 		this.edges = edges;
 	}
 
+	public Vertex createVertex(Coordinate coordinate, String id) {
+		Vertex vertex = new Vertex();
+		vertex.setId(id);
+		vertex.setCoordinate(coordinate);
+		vertices.add(vertex);
+		return vertex;
+	}
+
+	public Edge createEdge(Vertex source, Vertex target, String id) {
+		Edge directEdge = new Edge(source, target);
+		directEdge.setId(id);
+		this.edges.add(directEdge);
+
+		return directEdge;
+	}
 }
