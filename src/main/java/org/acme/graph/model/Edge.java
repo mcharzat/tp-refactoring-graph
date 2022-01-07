@@ -33,7 +33,7 @@ public class Edge {
 	 */
 	private Vertex target;
 
-	public Edge(Vertex source, Vertex target) {
+	Edge(Vertex source, Vertex target) {
 		assert source != null;
 		assert target != null;
 		
