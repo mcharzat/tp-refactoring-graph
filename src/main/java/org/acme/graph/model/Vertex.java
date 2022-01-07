@@ -1,5 +1,8 @@
 package org.acme.graph.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.locationtech.jts.geom.Coordinate;
 
@@ -27,6 +30,16 @@ public class Vertex {
 	 */
 	private double cost;
 	/**
+	 * arcs entrants
+	 */
+	@JsonIgnore
+	private List<Edge> inEdges = new ArrayList<Edge>();
+	/**
+	 * arcs sortants
+	 */
+	@JsonIgnore
+	private List<Edge> outEdges = new ArrayList<Edge>();
+	/**
 	 * dijkstra - arc entrant avec le meilleur coût
 	 */
 	private Edge reachingEdge;
@@ -36,7 +49,7 @@ public class Vertex {
 	private boolean visited;
 
 	Vertex() {
-
+		
 	}
 
 	public String getId() {
@@ -62,6 +75,14 @@ public class Vertex {
 
 	public void setCost(double cost) {
 		this.cost = cost;
+	}
+
+	public List<Edge> getInEdges() {
+		return inEdges;
+	}
+
+	public List<Edge> getOutEdges() {
+		return outEdges;
 	}
 
 	@JsonIgnore
