@@ -19,6 +19,7 @@
 		<!-- versions des autres dépendances -->
 		<geotools.version>24.5</geotools.version>
 		<jacoco.version>0.8.7</jacoco.version>
+		<cqengine.version>3.6.0</cqengine.version>
 	</properties>
 
 	<parent>
@@ -65,6 +66,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.googlecode.cqengine</groupId>
+			<artifactId>cqengine</artifactId>
+			<version>${cqengine.version}</version>
 		</dependency>
 	</dependencies>
 

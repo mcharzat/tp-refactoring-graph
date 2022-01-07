@@ -2,10 +2,13 @@ package org.acme.graph.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.acme.graph.errors.NotFoundException;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.LineString;
 
 /**
  * 
@@ -26,21 +29,17 @@ public class Graph {
 	private List<Edge> edges = new ArrayList<>();
 
 	/**
+	 * 
+	 */
+	private Map<Coordinate, Vertex> mapVertices = new HashMap<Coordinate, Vertex>();
+
+	/**
 	 * Récupération de la liste sommets
 	 * 
 	 * @return
 	 */
 	public Collection<Vertex> getVertices() {
 		return vertices;
-	}
-
-	/**
-	 * Récupération de la liste arcs
-	 * 
-	 * @return
-	 */
-	public void setVertices(List<Vertex> vertices) {
-		this.vertices = vertices;
 	}
 
 	/**
@@ -65,12 +64,7 @@ public class Graph {
 	 * @return
 	 */
 	public Vertex findVertex(Coordinate coordinate) {
-		for (Vertex vertex : vertices) {
-			Coordinate candidate = vertex.getCoordinate();
-			if (candidate != null && candidate.equals(coordinate)) {
-				return vertex;
-			}
-		}
+		if (mapVertices.containsKey(coordinate)) return mapVertices.get(coordinate);
 		throw new NotFoundException(String.format("Vertex not found at [%s,%s]", coordinate.x, coordinate.y));
 	}
 
@@ -87,10 +81,7 @@ public class Graph {
 			vertex = findVertex(coordinate);
 		} catch (NotFoundException e) {
 			/* création d'un nouveau sommet car non trouvé */
-			vertex = new Vertex();
-			vertex.setId(Integer.toString(getVertices().size()));
-			vertex.setCoordinate(coordinate);
-			vertices.add(vertex);
+			vertex = createVertex(coordinate, Integer.toString(getVertices().size()));
 		}
 		return vertex;
 	}
@@ -111,14 +102,8 @@ public class Graph {
 	 * @return
 	 */
 	public List<Edge> getInEdges(Vertex vertex) {
-		List<Edge> result = new ArrayList<>();
-		for (Edge candidate : edges) {
-			if (candidate.getTarget() != vertex) {
-				continue;
-			}
-			result.add(candidate);
-		}
-		return result;
+		
+		return vertex.getInEdges();
 	}
 
 	/**
@@ -128,23 +113,33 @@ public class Graph {
 	 * @return
 	 */
 	public List<Edge> getOutEdges(Vertex vertex) {
-		List<Edge> result = new ArrayList<>();
-		for (Edge candidate : edges) {
-			if (candidate.getSource() != vertex) {
-				continue;
-			}
-			result.add(candidate);
-		}
-		return result;
+		
+		return vertex.getOutEdges();
 	}
 
-	/**
-	 * Définition de la liste des arcs
-	 * 
-	 * @param edges
-	 */
-	public void setEdges(List<Edge> edges) {
-		this.edges = edges;
+	public Vertex createVertex(Coordinate coordinate, String id) {
+		Vertex vertex = new Vertex();
+		vertex.setId(id);
+		vertex.setCoordinate(coordinate);
+		vertices.add(vertex);
+		mapVertices.put(coordinate, vertex);
+		return vertex;
 	}
 
+	public Edge createEdge(Vertex source, Vertex target, String id) {
+		Edge edge = new Edge(source, target);
+		edge.setId(id);
+		this.edges.add(edge);
+
+		return edge;
+	}
+
+	public Edge createEdge(Vertex source, Vertex target, String id, LineString geometry) {
+		Edge edge = new Edge(source, target);
+		edge.setId(id);
+		edge.setGeometry(geometry);
+		this.edges.add(edge);
+
+		return edge;
+	}
 }
