@@ -71,14 +71,13 @@ public class DijkstraPathFinder {
 			 */
 			double newCost = pathTree.getOrCreateNode(vertex).getCost() + outEdge.getCost();
 			if (newCost < reachedNode.getCost()) {
-				reachedNode.setCost(newCost);
-				reachedNode.setReachingEdge(outEdge);
+				pathTree.setReached(reachedNode, newCost, outEdge);
 			}
 		}
 		/*
 		 * On marque le sommet comme visité
 		 */
-		pathTree.getOrCreateNode(vertex).setVisited(true);
+		pathTree.markVisited(vertex);
 	}
 
 	/**
@@ -89,24 +88,7 @@ public class DijkstraPathFinder {
 	 * @return
 	 */
 	private Vertex findNextVertex() {
-		double minCost = Double.POSITIVE_INFINITY;
-		Vertex result = null;
-		for (Vertex vertex : pathTree.getReachedVertices()) {
-			PathNode node = pathTree.getOrCreateNode(vertex);
-			// sommet déjà visité?
-			if (node.isVisited()) {
-				continue;
-			}
-			// sommet non atteint?
-			if (node.getCost() == Double.POSITIVE_INFINITY) {
-				continue;
-			}
-			// sommet le plus proche de la source?
-			if (node.getCost() < minCost) {
-				result = vertex;
-			}
-		}
-		return result;
+		return pathTree.getNearestNonVisitedVertex();
 	}
 
 }

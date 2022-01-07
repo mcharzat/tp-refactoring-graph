@@ -1,8 +1,11 @@
 package org.acme.graph.routing;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.googlecode.cqengine.attribute.SimpleAttribute;
+import com.googlecode.cqengine.query.option.QueryOptions;
 
 import org.acme.graph.model.Edge;
+import org.acme.graph.model.Vertex;
 
 /**
  * 
@@ -23,9 +26,25 @@ public class PathNode {
 	 */
 	private boolean visited = false;
 
-    public PathNode(double cost) {
+    /**
+     * 
+     */
+    Vertex vertex;
+
+    public PathNode(Vertex vertex, double cost) {
+        this.vertex = vertex;
         this.cost = cost;
     }
+
+    public Vertex getVertex() {
+        return vertex;
+    }
+
+    public static final SimpleAttribute<PathNode, Vertex> VERTEX = new SimpleAttribute<PathNode, Vertex>("nodeVertex") {
+		public Vertex getValue(PathNode node, QueryOptions queryOptions) {
+			return node.vertex;
+		}
+	};
     
     @JsonIgnore
 	public double getCost() {
@@ -35,6 +54,12 @@ public class PathNode {
 	public void setCost(double cost) {
 		this.cost = cost;
 	}
+
+    public static final SimpleAttribute<PathNode, Double> COST = new SimpleAttribute<PathNode, Double>("nodeCost") {
+		public Double getValue(PathNode node, QueryOptions queryOptions) {
+			return node.cost;
+		}
+	};
 
     @JsonIgnore
 	public Edge getReachingEdge() {
@@ -52,4 +77,10 @@ public class PathNode {
 	public void setVisited(boolean visited) {
 		this.visited = visited;
 	}
+
+    public static final SimpleAttribute<PathNode, Boolean> VISITED = new SimpleAttribute<PathNode, Boolean>("nodeVisited") {
+		public Boolean getValue(PathNode node, QueryOptions queryOptions) {
+			return node.visited;
+		}
+	};
 }
