@@ -23,7 +23,7 @@ public class DijkstraPathFinder {
 
 	private Graph graph;
 
-	PathTree pathTree;
+	private PathTree pathTree;
 
 	public DijkstraPathFinder(Graph graph) {
 		this.graph = graph;
