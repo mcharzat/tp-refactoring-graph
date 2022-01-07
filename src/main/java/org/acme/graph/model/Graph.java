@@ -2,7 +2,9 @@ package org.acme.graph.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.acme.graph.errors.NotFoundException;
 import org.locationtech.jts.geom.Coordinate;
@@ -25,6 +27,11 @@ public class Graph {
 	 * Liste des arcs
 	 */
 	private List<Edge> edges = new ArrayList<>();
+
+	/**
+	 * 
+	 */
+	private Map<Coordinate, Vertex> mapVertices = new HashMap<Coordinate, Vertex>();
 
 	/**
 	 * Récupération de la liste sommets
@@ -57,12 +64,7 @@ public class Graph {
 	 * @return
 	 */
 	public Vertex findVertex(Coordinate coordinate) {
-		for (Vertex vertex : vertices) {
-			Coordinate candidate = vertex.getCoordinate();
-			if (candidate != null && candidate.equals(coordinate)) {
-				return vertex;
-			}
-		}
+		if (mapVertices.containsKey(coordinate)) return mapVertices.get(coordinate);
 		throw new NotFoundException(String.format("Vertex not found at [%s,%s]", coordinate.x, coordinate.y));
 	}
 
@@ -120,6 +122,7 @@ public class Graph {
 		vertex.setId(id);
 		vertex.setCoordinate(coordinate);
 		vertices.add(vertex);
+		mapVertices.put(coordinate, vertex);
 		return vertex;
 	}
 
