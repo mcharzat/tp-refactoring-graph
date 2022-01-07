@@ -135,10 +135,11 @@ public class Graph {
 	}
 
 	public Edge createEdge(Vertex source, Vertex target, String id) {
-		Edge directEdge = new Edge(source, target);
-		directEdge.setId(id);
-		this.edges.add(directEdge);
+		Edge edge = new Edge(source, target);
+		edge.setId(id);
+		edge.setGeometry(edge.getGeometry());
+		this.edges.add(edge);
 
-		return directEdge;
+		return edge;
 	}
 }
